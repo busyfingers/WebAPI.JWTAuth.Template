@@ -3,6 +3,12 @@ This is a ASP.NET Core Project Template for quickly scaffolding an application w
 
 By default it uses an in-memory database but can easily be swapped to any database provider supported by Entity Framework Core.
 
+## How to use
+1. Open a terminal window.
+2. Create a folder for your project and change directory to that folder.
+3. Install the template from NuGet: ```dotnet new -i busyfingers.JWTauth.WebAPITemplate```
+4. Create project using the template: ```dotnet new busyfingers.webapi.jwtauth```
+
 ## Routes
 | Route         | Method | Auth required | Description      |
 | ------------- |:------:|:-------------:|:-----------------|
