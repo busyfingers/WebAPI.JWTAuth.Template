@@ -1,0 +1,8 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Niklas Malmqvist",
+  "classifications": [ "ASP.NET Core", "JWT", "Authorization", "Background Worker", "Cron" ],
+  "identity": "busyfingers.JWTauth.WebAPITemplate",
+  "name": "busyfingers WebAPI JWT Auth Template",
+  "shortName": "busyfingers.webapi.jwtauth"
+}

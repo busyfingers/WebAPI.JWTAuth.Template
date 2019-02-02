@@ -24,5 +24,9 @@
     <Folder Include="Extensions\" />
     <Folder Include="logs\" />
     <Folder Include="Controllers\" />
+    <Folder Include=".template.config\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".template.config\template.json" />
   </ItemGroup>
 </Project>
