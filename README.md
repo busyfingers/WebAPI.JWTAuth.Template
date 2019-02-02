@@ -64,3 +64,7 @@ To configure the schedule for a background worker, simply add a key-value pair i
   ...
 ```
 This will compress the logs at 23:59 every day.
+
+## Credits
+* The JWT Authorization and user management is based on this excellent blog post by Jason Watmore: http://jasonwatmore.com/post/2018/06/26/aspnet-core-21-simple-api-for-authentication-registration-and-user-management
+* The Background Worker implementation is based on this great blog post by Maarten Balliauw: https://blog.maartenballiauw.be/post/2017/08/01/building-a-scheduled-cache-updater-in-aspnet-core-2.html 
