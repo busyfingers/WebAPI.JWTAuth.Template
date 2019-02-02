@@ -59,10 +59,14 @@ namespace WebAPI.JWTAuth.Template
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = await userService.GetById(userId);
 
-                        if (user == null)
+                        try
                         {
+                            await userService.GetById(userId);
+                        }
+                        catch
+                        {
+                            // If user is not found, an AppException is thrown
                             context.Fail("Unauthorized");
                         }
                     }
