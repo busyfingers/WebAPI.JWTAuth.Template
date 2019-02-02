@@ -1,4 +1,4 @@
-﻿namespace CrawlBack.DTO
+﻿namespace WebAPI.JWTAuth.Template.Dto
 {
     public class UserDto
     {

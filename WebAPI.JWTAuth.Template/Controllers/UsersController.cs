@@ -5,16 +5,16 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using CrawlBack.DTO;
-using CrawlBack.Helpers;
-using CrawlBack.Models;
-using CrawlBack.Services;
+using WebAPI.JWTAuth.Template.Dto;
+using WebAPI.JWTAuth.Template.Helpers;
+using WebAPI.JWTAuth.Template.Models;
+using WebAPI.JWTAuth.Template.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace CrawlBack.Controllers
+namespace WebAPI.JWTAuth.Template.Controllers
 {
     [Authorize]
     [ApiController]
@@ -75,6 +75,9 @@ namespace CrawlBack.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto userDto, [FromQuery] string signupCode)
         {
+            // Set to empty string if null to not incorrectly fail the check below
+            signupCode = signupCode ?? "";
+
             if (_accountConfig.SignupCode != signupCode)
             {
                 return BadRequest(new { message = "Invalid signup code" });
@@ -85,6 +88,7 @@ namespace CrawlBack.Controllers
             try
             {
                 await _userService.Create(user, userDto.Password);
+
                 return Ok();
             }
             catch (AppException ex)
@@ -98,6 +102,7 @@ namespace CrawlBack.Controllers
         {
             var users = await _userService.GetAll();
             var userDtos = _mapper.Map<IList<UserDto>>(users);
+
             return Ok(userDtos);
         }
 
@@ -125,6 +130,7 @@ namespace CrawlBack.Controllers
             try
             {
                 await _userService.Update(user, userDto.Password);
+
                 return Ok();
             }
             catch (AppException ex)
@@ -139,6 +145,7 @@ namespace CrawlBack.Controllers
             try
             {
                 await _userService.Delete(id);
+
                 return Ok();
             }
             catch (AppException ex)

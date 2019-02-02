@@ -3,25 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CrawlBack.BackgroundWorker.Cron;
+using Microsoft.Extensions.Configuration;
+using WebAPI.JWTAuth.Template.BackgroundWorker.Cron;
 
-namespace CrawlBack.BackgroundWorker.Scheduler
+namespace WebAPI.JWTAuth.Template.BackgroundWorker.Scheduler
 {
+    /// <summary>
+    /// Code kindly provided by Maarten Balliauw
+    /// https://blog.maartenballiauw.be/post/2017/08/01/building-a-scheduled-cache-updater-in-aspnet-core-2.html
+    /// </summary>
     public class SchedulerHostedService : HostedService
     {
         public event EventHandler<UnobservedTaskExceptionEventArgs> UnobservedTaskException;
             
         private readonly List<SchedulerTaskWrapper> _scheduledTasks = new List<SchedulerTaskWrapper>();
 
-        public SchedulerHostedService(IEnumerable<IScheduledTask> scheduledTasks)
+        public SchedulerHostedService(IEnumerable<IScheduledTask> scheduledTasks) : this(scheduledTasks, null)
+        { }
+
+        public SchedulerHostedService(IEnumerable<IScheduledTask> scheduledTasks, IConfigurationSection cronSettings)
         {
             var referenceTime = DateTime.UtcNow;
             
             foreach (var scheduledTask in scheduledTasks)
             {
+                var name = scheduledTask.GetType().Name;
+                var cronExpression = cronSettings?.GetValue<string>(name);
+
                 _scheduledTasks.Add(new SchedulerTaskWrapper
                 {
-                    Schedule = CrontabSchedule.Parse(scheduledTask.Schedule),
+                    Schedule = CrontabSchedule.Parse(string.IsNullOrEmpty(cronExpression) ? scheduledTask.Schedule : cronExpression),
                     Task = scheduledTask,
                     NextRunTime = referenceTime
                 });

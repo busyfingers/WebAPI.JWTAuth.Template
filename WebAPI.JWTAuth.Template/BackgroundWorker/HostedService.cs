@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
-namespace CrawlBack.BackgroundWorker
+namespace WebAPI.JWTAuth.Template.BackgroundWorker
 {
     public abstract class HostedService : IHostedService
     {

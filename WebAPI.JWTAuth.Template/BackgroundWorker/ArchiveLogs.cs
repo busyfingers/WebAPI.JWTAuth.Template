@@ -1,15 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
-using CrawlBack.BackgroundWorker.Scheduler;
-using CrawlBack.Helpers;
+using WebAPI.JWTAuth.Template.BackgroundWorker.Scheduler;
+using WebAPI.JWTAuth.Template.Helpers;
 using Microsoft.Extensions.Logging;
 
-namespace CrawlBack.BackgroundWorker
+namespace WebAPI.JWTAuth.Template.BackgroundWorker
 {
     public class ArchiveLogs : IScheduledTask
     {
-        private ILogger _logger;
-        public string Schedule => "59 23 * * *";
+        private readonly ILogger _logger;
+        public string Schedule => "";
 
         public ArchiveLogs(ILogger<ArchiveLogs> logger)
         {

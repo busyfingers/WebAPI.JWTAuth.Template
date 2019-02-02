@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using WebAPI.JWTAuth.Template.Helpers;
+using WebAPI.JWTAuth.Template.Extensions;
 
 namespace WebAPI.JWTAuth.Template
 {
@@ -14,11 +14,46 @@ namespace WebAPI.JWTAuth.Template
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.File("logs/webapi-.log",
+                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                    rollingInterval: RollingInterval.Day)
+                .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Error)
+                .CreateLogger();
+
+            FileUtils.EnsureDirectory("logs");
+
+            try
+            {
+                Log.Information("Starting application");
+
+                var config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddCommandLine(args)
+                    .Build();
+
+                CreateWebHostBuilder(args)
+                    .UseConfiguration(config)
+                    .SetupKestrel(config)
+                    .Build()
+                    .Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Appication terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog();
     }
 }
